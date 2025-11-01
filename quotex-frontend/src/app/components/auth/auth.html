@@ -1,0 +1,203 @@
+<section>
+    <div class="auth-container">
+        <div class="left-auth">  
+            <app-logo></app-logo>
+            <div class="info-container">
+                @if (!isLogin) {
+                    <h3 class="info-title">Crie sua conta e comece a investir.</h3>
+                    <p class="info">Configure seu perfil para acessar o painel com investimentos pessoais e em alta.</p>
+                } @else {
+                    <h3 class="info-title">Invista com confiança.</h3>
+                    <p class="info">Acompanhe seu portfolio e descubra oportunidades sob medida para o seu perfil.</p>
+                }
+                
+            </div>
+           
+            <div class="example-investments-container">
+                <div class="example-investments-component">
+                    <div class="title-percentage">
+                        <p>Carteira</p>
+                        <p>+12.4%</p>
+                    </div>
+                    
+                    <p>YTD | Diversificada</p>
+                </div>
+                <div class="example-investments-component">
+                    <div class="title-percentage">
+                        <p>Cripto</p>
+                        <p>-1.2%</p>
+                    </div>
+                    <p>BTC/USD | Volatilidade alta</p>
+                </div>
+                <div class="example-investments-component">
+                    <div class="title-percentage">
+                        <p>ETFs</p>
+                        <p>+4.7%</p>
+                    </div>
+                    <p>Custos baixos | Smart beta</p>
+                </div>
+                <div class="example-investments-component">
+                    <div class="title-percentage">   
+                        <p>FX</p>
+                        <p>+2.2%</p>
+                    </div>
+                    <p>EUR/BRL | Tendência</p>
+                </div>
+            </div>
+        </div>
+        <div class="right-auth">
+            @if (!isLogin) {
+                <div>
+                <div>
+                    <h3 class="form-title">Criar conta</h3>
+                    <p class="form-info">Use seu email e defina uma senha para acessar o Inzora Quotex.</p>
+                </div>
+                <form #form="ngForm" (ngSubmit)="onSubmit(form.value)">
+
+                    <label for="username">Nome de usuário</label>
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        ngModel
+                        required
+                        #username="ngModel"
+                    />
+                    <div class="error" *ngIf="username.invalid && username.touched">
+                        Nome de usuário é obrigatório.
+                    </div>
+
+                    <!-- Email -->
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        ngModel
+                        required
+                        email
+                        #email="ngModel"
+                    />
+                    <div class="error" *ngIf="email.invalid && email.touched">
+                        <span *ngIf="email.errors?.['required']">E-mail é obrigatório.</span>
+                        <span *ngIf="email.errors?.['email']">Formato de e-mail inválido.</span>
+                    </div>
+
+                    <!-- Senha -->
+                    <label for="password">Senha</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        ngModel
+                        required
+                        minlength="6"
+                        #password="ngModel"
+                    />
+                    <div class="error" *ngIf="password.invalid && password.touched">
+                        <span *ngIf="password.errors?.['required']">Senha é obrigatória.</span>
+                        <span *ngIf="password.errors?.['minlength']">
+                        A senha deve ter pelo menos 6 caracteres.
+                        </span>
+                    </div>
+
+                    <label for="confirm-password">Confirmar senha</label>
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        id="confirm-password"
+                        ngModel
+                        required
+                        #confirmPassword="ngModel"
+                    />
+                    @if (confirmPassword.invalid && confirmPassword.touched) {
+                        <div class="error">
+                            Confirmação de senha é obrigatória.
+                        </div>
+                    }
+                    
+
+                    @if (passwordsDoNotMatch) {
+                        <div class="error">
+                            As senhas não conferem.
+                        </div>
+                    }
+                    <button type="submit">Criar conta</button>
+                    <button type="button" (click)="switchLogin()" class="switchs">
+
+                         @if (isLogin) {Ainda não tem uma conta?} @else {Já tem uma conta?}
+                    </button>
+                </form>
+                
+            </div>
+            } @else {
+                <div>
+                    <div>
+                        <h3 class="form-title">Entrar</h3>
+                        <p class="form-info">Informe seu email e senha para acessar sua conta.</p>
+                    </div>
+                    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.value)">
+                        <!-- Email -->
+                        <label for="login-email">Email</label>
+                        <input
+                            type="email"
+                            name="email"
+                            id="login-email"
+                            ngModel
+                            required
+                            email
+                            #loginEmail="ngModel"
+                        />
+                        <div class="error" *ngIf="loginEmail.invalid && loginEmail.touched">
+                            <span *ngIf="loginEmail.errors?.['required']">E-mail é obrigatório.</span>
+                            <span *ngIf="loginEmail.errors?.['email']">Formato de e-mail inválido.</span>
+                        </div>
+
+                        <!-- Senha -->
+                        <label for="login-password">Senha</label>
+                        <input
+                            type="password"
+                            name="password"
+                            id="login-password"
+                            ngModel
+                            required
+                            minlength="6"
+                            #loginPassword="ngModel"
+                        />
+                        <div class="error" *ngIf="loginPassword.invalid && loginPassword.touched">
+                            <span *ngIf="loginPassword.errors?.['required']">Senha é obrigatória.</span>
+                            <span *ngIf="loginPassword.errors?.['minlength']">
+                            A senha deve ter pelo menos 6 caracteres.
+                            </span>
+                        </div>
+
+                        <button type="submit">Entrar</button>
+                        <button type="button" (click)="switchLogin()" class="switchs">
+
+                         @if (isLogin) {Ainda não tem uma conta?} @else {Já tem uma conta?}
+                    </button>
+                    </form>
+                </div>
+            }
+            
+            
+        </div>
+    </div>
+    
+</section>
+
+@if (showModal) {
+<div class="modal-backdrop">
+  <div class="modal-box" [ngClass]="modalType">
+    <h3>{{ modalTitle }}</h3>
+    <p>{{ modalMessage }}</p>
+
+    <div class="buttons">
+      <button (click)="onModalOk()">OK</button>
+      @if (modalShowCancel) {
+        <button (click)="onModalCancel()">Cancelar</button>
+      }
+    </div>
+  </div>
+</div>
+}
