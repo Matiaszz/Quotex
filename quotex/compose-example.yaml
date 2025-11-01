@@ -2,15 +2,24 @@ services:
   azurite:
     image: 'mcr.microsoft.com/azure-storage/azurite:latest'
     ports:
-      - '10000'
-      - '10001'
-      - '10002'
+      - '10000:10000'
+      - '10001:10001'
+      - '10002:10002'
   mysql:
     image: 'mysql:latest'
     environment:
       - 'MYSQL_DATABASE=quotex_db'
-      - 'MYSQL_PASSWORD=root'
       - 'MYSQL_ROOT_PASSWORD=root'
-      - 'MYSQL_USER=root'
     ports:
-      - '3306'
+      - '3306:3306'
+  quotex-app: # Add your application's service
+    build: . # Tells Docker Compose to build the image from the Dockerfile in the current directory
+    ports:
+      - "8080:8080" # Map your app's port to the host
+    depends_on:
+      - mysql # Tells Docker Compose to start mysql before starting your app
+    environment:
+      # You can override application.yml properties here
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/quotex_db
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
